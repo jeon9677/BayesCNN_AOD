@@ -11,6 +11,16 @@ from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 import pyreadr
 
+def save_np(arr, path):
+    with open(path, 'wb') as f:
+        np.save(f, arr)
+
+
+def load_np(path):
+    with open(path, 'rb') as f:
+        arr = np.load(f)
+    return arr
+
 
 def get_dropout(input_tensor, p=0.5, mc=False):
     if mc:
@@ -35,21 +45,13 @@ def get_model2(mc=False, act="relu"):
                activation='softmax')(z)
     z = get_dropout(z, p=0.3, mc=mc)
     z = MaxPooling1D()(z)
-    # z = Conv1D(16,
-    #            kernel_size=3,
-    #            strides=1,
-    #            activation='relu')(z)
-    # z = get_dropout(z, p=0.3, mc=mc)
-    # z = MaxPooling1D()(z)
     z = Flatten()(z)
     y = Dense(16, activation='softmax')(z)
     y = get_dropout(y, p=0.3, mc=mc)
     p = Dense(8, activation='softmax')(z)
     p = get_dropout(p, p=0.3, mc=mc)
-    # s = concatenate([p,prev_inp,other_input,other_input2])
     s = concatenate([p,prev_inp,other_input])
     out = Dense(1, activation='softplus')(s)
-    # model = Model(inputs=[inp,prev_inp,other_input,other_input2], outputs=out)
     model = Model(inputs=[inp,prev_inp,other_input], outputs=out)
     model.compile(optimizer=Adam(learning_rate=0.001), 
                   loss='mse',
@@ -95,10 +97,10 @@ if __name__ == '__main__':
     input_shape = (1320, 1)
     input_shape2 = (1,)
     input_shape3 = (1,)
-    # input_shape4 = (1,)
-    batch_size = 10  # 10 for August 32 for September #버전4=10    32,   ver3 softplus 32/50
-    epochs = 50  # 5 for August 30 for September #ver4,5 20    50, 100
-
+    input_shape4 = (1,)
+    batch_size = 10  
+    epochs = 50  
+    
     mc_model = get_model2(mc=True, act="relu")
 
     h_mc = mc_model.fit([train_basis, train_airnow, train_humidity, train_aerosol], train_y_now,
