@@ -1,10 +1,19 @@
 import sys
 import logging
 from keras.models import Sequential, Model, Input, load_model
-from utils import load_np, save_np
 import pandas as pd
 import numpy as np
 from sklearn.preprocessing import StandardScaler
+
+def save_np(arr, path):
+    with open(path, 'wb') as f:
+        np.save(f, arr)
+
+
+def load_np(path):
+    with open(path, 'rb') as f:
+        arr = np.load(f)
+    return arr
 
 if __name__ == '__main__':
     mc_model = load_model(f'model_simulation/update_50days_softplus.h5')  
