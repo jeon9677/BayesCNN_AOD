@@ -1,4 +1,4 @@
-# Python codes for 'A Bayesian Convolutional Neural Network-based Generalized Linear Model'
+# Python codes for BayesCNN
 
 ## Package version
 * numpy version: 1.19.5
