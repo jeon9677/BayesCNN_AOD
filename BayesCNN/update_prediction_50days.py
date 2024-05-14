@@ -33,7 +33,7 @@ if __name__ == '__main__':
     mc_predictions_cnn_cov = []
 
 
-    for j in range(100):
+    for j in range(100):  # number of MC dropout
         CNN_prediction_Y_cv = mc_model.predict([test_stbasis,test_airnow_scaled,test_humidity,test_aerosol])
         response = np.array(CNN_prediction_Y_cv)
         mc_predictions_cnn_cov.append(response)
